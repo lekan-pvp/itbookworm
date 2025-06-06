@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
+
+	"github.com/lekan-pvp/itbookworm/internal/data"
 )
 
 // Добавляем обработчик createBookHandler для эндпоинта `POST /v1/books`.
@@ -20,5 +23,18 @@ func (app *application) showBookHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	fmt.Fprintf(w, "show the details of book %d\n", id)
+	book := data.Book{
+		ID:       id,
+		CreateAt: time.Now(),
+		Title:    "Effective concurency in Go",
+		Pages:    532,
+		Genres:   []string{"IT"},
+		Edition:  3,
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"book": book}, nil)
+	if err != nil {
+		app.logger.Println(err)
+		http.Error(w, "Сервер обнаружил проблему и не смог обработать ваш запрос", http.StatusInternalServerError)
+	}
 }
