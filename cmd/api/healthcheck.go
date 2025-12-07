@@ -15,7 +15,7 @@ func (app *application) healthcheckHandler(w http.ResponseWriter, r *http.Reques
 
 	err := app.writeJSON(w, http.StatusOK, env, nil)
 	if err != nil {
-		app.logger.Panicln(err)
-		http.Error(w, "Сервер обнаружил проблему и не смог обработать ваш запрос", http.StatusInternalServerError)
+		// Используем новый метод для обработки ошибок сервера serverErrorResponse()
+		app.serverErrorResponse(w, r, err)
 	}
 }

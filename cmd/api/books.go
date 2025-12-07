@@ -19,7 +19,8 @@ func (app *application) createBookHandler(w http.ResponseWriter, r *http.Request
 func (app *application) showBookHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
-		http.NotFound(w, r)
+		// используем новый метод notFoundResponse()
+		app.notFoundResponse(w, r)
 		return
 	}
 
@@ -34,7 +35,7 @@ func (app *application) showBookHandler(w http.ResponseWriter, r *http.Request) 
 
 	err = app.writeJSON(w, http.StatusOK, envelope{"book": book}, nil)
 	if err != nil {
-		app.logger.Println(err)
-		http.Error(w, "Сервер обнаружил проблему и не смог обработать ваш запрос", http.StatusInternalServerError)
+		// используем новый метод для обработки ошибок сервера serverErrorResponse()
+		app.serverErrorResponse(w, r, err)
 	}
 }
