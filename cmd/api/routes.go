@@ -24,3 +24,5 @@ func (app *application) routes() *chi.Mux {
 	// Возвращаем экземпляр chi.Mux
 	return router
 }
+
+
